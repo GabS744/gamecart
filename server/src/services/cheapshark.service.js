@@ -1,3 +1,5 @@
+import { normalizeTitle } from "../utils/normalize.js";
+
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 
 let storesCache = null;
@@ -45,4 +47,20 @@ export async function getStores() {
   }, {});
 
   return storesCache;
+}
+
+export async function findBestMatch(rawgTitle) {
+  const results = await searchGameByTitle(rawgTitle);
+
+  if (!results || results.length === 0) {
+    return null;
+  }
+
+  const normalizedTarget = normalizeTitle(rawgTitle);
+
+  const exactMatch = results.find(
+    (game) => normalizeTitle(game.external) === normalizedTarget
+  );
+
+  return exactMatch || results[0];
 }

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { searchGameByTitle, getGameDeals } from '../services/cheapshark.service.js';
+import { searchGameByTitle, getGameDealsWithStoreNames } from '../services/cheapshark.service.js';
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.get('/search', async (req, res) => {
 
 router.get('/deals/:id', async (req, res) => {
   try {
-    const data = await getGameDeals(req.params.id);
+    const data = await getGameDealsWithStoreNames(req.params.id);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });

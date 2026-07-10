@@ -46,3 +46,20 @@ export async function getStores() {
 
   return storesCache;
 }
+
+export async function getGameDealsWithStoreNames(cheapSharkId) {
+  const [dealsData, stores] = await Promise.all([
+    getGameDeals(cheapSharkId),
+    getStores(),
+  ]);
+
+  const dealsWithStoreNames = dealsData.deals.map((deal) => ({
+    ...deal,
+    storeName: stores[deal.storeID] || 'Unknown Store',
+  }));
+
+  return {
+    ...dealsData,
+    deals: dealsWithStoreNames,
+  };
+}
